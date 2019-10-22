@@ -5,7 +5,8 @@
 void copySrcOnDst(int src, int dst){
     void *buffer = malloc(sizeof(char)*1024);
 
-    int nb_bytes_lues = read(src, buffer, 1024);
+    int nb_bytes_lues = read(src, buffer, 2);
+    fprintf(stdout,"J'ai lu %d bytes", nb_bytes_lues);
     
     FILE* fichier = NULL;
     
