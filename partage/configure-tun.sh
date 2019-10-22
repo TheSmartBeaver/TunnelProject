@@ -1,6 +1,10 @@
 #!/bin/bash
 gcc tunalloc.c -o tunalloc
 sleep 3s
-./tunalloc tun0 &
+./tunalloc tun0
 sleep 3s
-ip addr add 172.16.2.1/28 dev tun0
+
+ip link set tun0 up
+sleep 1s
+ip addr add 172.16.2.1/24 dev tun0
+
