@@ -2,16 +2,16 @@
 #include <stdio.h>
 #include <string.h>
 
-void copySrcOnDst(int src, int dst){
-    void *buffer = malloc(sizeof(char)*1024);
-
-    int nb_bytes_lues = read(src, buffer, 2);
-    fprintf(stdout,"J'ai lu %d bytes", nb_bytes_lues);
-    
+int copySrcOnDst(int src, int dst){
+    char buffer[2000]; /*taille doit être au min celle du MTU (1500) ???*/
+    int nb_bytes_lues = 0;
+    nb_bytes_lues = read(src, buffer, 2000);
+    int i;
+    for(i=0; i<2000; i++)
+        printf("%c",buffer[i]);
+    printf("\n");
     FILE* fichier = NULL;
-    
     fichier = fopen("test.txt", "a");
- 
     if (fichier != NULL)
     {
         fputs(buffer, fichier);
@@ -19,12 +19,5 @@ void copySrcOnDst(int src, int dst){
             fprintf(stdout, buffer);
         fclose(fichier);
     }
-
+    return nb_bytes_lues;
 }
-
-/*int main (int argc, char** argv){
-while(1){
-    copySrcOnDst(0,1);
-}
-return 0;
-}*/

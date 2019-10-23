@@ -11,25 +11,8 @@
 #include <linux/if_tun.h>
 #include <stdbool.h>
 
-int copySrcOnDst(int src, int dst){
-    char buffer[2000]; /*taille doit être au min celle du MTU (1500) ???*/
-    int nb_bytes_lues = 0;
-    nb_bytes_lues = read(src, buffer, 1024);
-    int i;
-    for(i=0; i<2000; i++)
-        printf("%c",buffer[i]);
-    printf("\n");
-    FILE* fichier = NULL;
-    fichier = fopen("test.txt", "a");
-    if (fichier != NULL)
-    {
-        fputs(buffer, fichier);
-        if(dst==1)
-            fprintf(stdout, buffer);
-        fclose(fichier);
-    }
-    return nb_bytes_lues;
-}
+#include "iftun.h"
+#include "extremite.h"
 
 int tun_alloc(char *dev)
 {
@@ -48,7 +31,7 @@ int tun_alloc(char *dev)
    *
    *        IFF_NO_PI - Do not provide packet information  
    */ 
-  ifr.ifr_flags = IFF_TUN; 
+  ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
   if( *dev )
     strncpy(ifr.ifr_name, dev, IFNAMSIZ);
 
@@ -78,10 +61,15 @@ int main (int argc, char** argv){
   printf("fd de tunfd %d\n",tunfd);
   int gg = open("test.txt", O_RDWR);
   int nb = -5;
-  while(true) {
-      nb = copySrcOnDst(tunfd, 1);
-      printf("J'ai lu %d bytes\n", nb);
-  }
+
+  /*while (true){
+      copySrcOnDst(tunfd,1);
+  }*/
+
+  ext_in("172.16.2.156", tunfd);
+
+  printf("Appuyer met fin au tunnel");
+  getchar();
 
   return 0;
 }

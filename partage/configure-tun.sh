@@ -1,5 +1,5 @@
 #!/bin/bash
-gcc tunalloc.c -o tunalloc
+make tunalloc
 sleep 3s
 ./tunalloc tun0
 sleep 3s
