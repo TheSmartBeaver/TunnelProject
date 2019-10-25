@@ -1,4 +1,7 @@
 #!/bin/bash
+echo "j'applique le salt"
+salt-call state.apply
+sleep 10s
 make tunalloc
 sleep 3s
 ./tunalloc tun0
