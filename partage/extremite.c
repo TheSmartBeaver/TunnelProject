@@ -13,7 +13,7 @@
 // Function designed for chat between client and server.
 void func(int sockfd)
 {
-    char buff[MAX];
+    unsigned char buff[MAX];
     int n;
     // infinite loop for chat
     for (;;) {
@@ -88,7 +88,7 @@ void ext_out()
 
 void func2(int sockfd, int src, int dest)
 {
-      char buff[MAX]; 
+      unsigned char buff[MAX]; 
     int n; 
     for (;;) { 
         bzero(buff, sizeof(buff)); 
@@ -142,7 +142,7 @@ close(sockfd);
 }
 
 int copySrcOnDstv2(int sockfd, int src){
-    char buff[MAX]; 
+    unsigned char buff[MAX]; 
     int n; 
     for (;;) { 
         bzero(buff, sizeof(buff)); 
