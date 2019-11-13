@@ -6,16 +6,64 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/ioctl.h>
+
+#include <fcntl.h>
+#include <linux/if.h>
+#include <linux/if_tun.h>
+#include <stdbool.h>
+
+
+
 #define MAX 2000
 #define PORT 123
 #define SA struct sockaddr
 
-// Function designed for chat between client and server.
-void func(int sockfd)
+int tun_alloc(char *dev)
+{
+    struct ifreq ifr;
+    int fd, err;
+
+    if( (fd = open("/dev/net/tun", O_RDWR)) < 0 ){
+        perror("open");
+        exit(-1);
+    }
+
+    memset(&ifr, 0, sizeof(ifr));
+
+    /* Flags: IFF_TUN   - TUN device (no Ethernet headers)
+     *        IFF_TAP   - TAP device
+     *
+     *        IFF_NO_PI - Do not provide packet information
+     */
+    ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+    if( *dev )
+        strncpy(ifr.ifr_name, dev, IFNAMSIZ);
+
+    if( (err = ioctl(fd, TUNSETIFF, (void *) &ifr)) < 0 ){
+        close(fd);
+        perror("ioctl");
+        return err;
+    }
+    //strcpy(dev, ifr.ifr_name);
+    return fd;
+}
+
+void func(int sockfd, int src)
 {
     unsigned char buff[MAX];
     int n;
     // infinite loop for chat
+    /*printf("\n Je tente création tun0 \n");
+    int tun = tun_alloc("tun0");
+    if(tun<0) {
+        printf("\nERREUR tun0 création\n");
+        exit(1);
+    }
+    printf("\n mon tun0 = %d",tun);*/
     for (;;) {
         bzero(buff, MAX);
 
@@ -27,6 +75,10 @@ void func(int sockfd)
         int i;
         for(i=0; i<2000; i++)
             printf("%c",buff[i]);
+	printf("\n");
+
+	    write(src,buff, sizeof(buff));
+
         bzero(buff, MAX);
         n = 0;
     }
@@ -37,6 +89,16 @@ void ext_out()
 {
     int sockfd, connfd, len;
     struct sockaddr_in servaddr, cli;
+
+    printf("\n Je tente création tun0 \n");
+    int tun = tun_alloc("tun0");
+    if(tun<0) {
+        printf("\nERREUR tun0 création\n");
+        exit(1);
+    }
+    printf("\n mon tun0 = %d",tun);
+
+    system("ip link set tun0 up");
 
     // socket create and verification
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -79,10 +141,8 @@ void ext_out()
     else
         printf("server acccept the client...\n");
 
-    // Function for chatting between client and server
-    func(connfd);
+    func(connfd, tun);
 
-    // After chatting close the socket
     close(sockfd);
 }
 
@@ -132,7 +192,6 @@ exit(0);
 else
 printf("connected to the server..\n");
 
-// function for chat
 //func2(sockfd);
     copySrcOnDstv2(sockfd, tunfd);
 
@@ -166,3 +225,4 @@ int copySrcOnDstv2(int sockfd, int src){
 
     return 0;
 }
+
