@@ -22,7 +22,7 @@ eth1:
     - ipv6proto: static
     - enable_ipv6: true
     - ipv6_autoconf: no
-    - ipv6ipaddr: fc00:1234:1::2
+    - ipv6ipaddr: fc00:1234:1::26
     - ipv6netmask: 64
 
 eth2:
@@ -34,7 +34,7 @@ eth2:
     - ipv6proto: static
     - enable_ipv6: true
     - ipv6_autoconf: no
-    - ipv6ipaddr: fc00:1234:2::2
+    - ipv6ipaddr: fc00:1234:2::26
     - ipv6netmask: 64
 
 ## No need to add routes

@@ -19,9 +19,11 @@ eth1:
     - type: eth
     - proto: none
     - enable_ipv4: false
-    - ipv6proto: auto
+    - ipv6proto: static
     - enable_ipv6: true
-    - ipv6_autoconf: yes
+    - ipv6_autoconf: no
+    - ipv6ipaddr: fc00:1234:1::36
+    - ipv6netmask: 64
 
 eth2:
   network.managed:
@@ -31,5 +33,11 @@ eth2:
     - ipaddr: 172.16.2.186
     - netmask: 28
 
-## Configuration de la route vers LAN2 via VM2
-## -> annoncée
+## Configuration de la route vers LAN1-6 via VM2-6
+routes:
+  network.routes:
+    - name: eth1
+    - routes:
+      - name: LAN1-6
+        ipaddr: fc00:1234:1::/64
+        gateway: fc00:1234:2::26
