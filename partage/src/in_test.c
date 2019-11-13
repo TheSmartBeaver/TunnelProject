@@ -23,11 +23,29 @@ int main(int argc, char** argv){
         perror("tun_alloc");
         exit(1);
     }
+    char cmdLink[50] = "ip link set ";
+	strcat(cmdLink,argv[1]);
+	strcat(cmdLink," up");
+	printf("J'execute %s\n",cmdLink);
+	system(cmdLink);
 
-    system("ip addr");
-    printf("\nfd de tunfd %d\n",tunfd);
 
-    ext_in("172.16.2.156", tunfd);
+    if(strcmp("VM1",argv[2])==0) {
+		printf("On est dans VM1\n");
+		char cmdIpAddr[100] = "ip addr add 172.16.2.180/28 dev ";
+		strcat(cmdIpAddr,argv[1]);
+		printf("J'execute %s\n",cmdIpAddr);
+		system(cmdIpAddr);
+		ext_in("172.16.2.156", tunfd, "ipv4");
+	}
+	else if(strcmp("VM1-6",argv[2])==0){
+		printf("On est dans VM1-6\n");
+		system("ip addr add fc00:1234:2::30 dev tun0");
+		ext_in("fc00:1234:2::36", tunfd, "ipv6");
+	}
+	else {printf("\nERREUR\n"); exit(1);}
+
+
 
     printf("Appuyer met fin au tunnel");
     getchar();

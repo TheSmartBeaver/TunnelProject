@@ -9,9 +9,14 @@ in_test: $(HEAD_DIR)extremite.h $(HEAD_DIR)tunalloc.h $(HEAD_DIR)iftun.h tunallo
 out_test: out_test.o extremite.o tunalloc.o iftun.o
 	gcc -Iheaders -o $(EXEC_DIR)out_test $(TEMP_DIR)out_test.o $(TEMP_DIR)extremite.o $(TEMP_DIR)tunalloc.o $(TEMP_DIR)iftun.o
 
-
 out_test.o: $(SRC_DIR)out_test.c
 	gcc -Iheaders -o $(TEMP_DIR)out_test.o -c $(SRC_DIR)out_test.c
+
+relai: relai.o extremite.o tunalloc.o iftun.o
+	gcc -Iheaders -o $(EXEC_DIR)relai $(TEMP_DIR)relai.o $(TEMP_DIR)extremite.o $(TEMP_DIR)tunalloc.o $(TEMP_DIR)iftun.o -lpthread
+
+relai.o: $(SRC_DIR)relai.c
+	gcc -Iheaders -o $(TEMP_DIR)relai.o -c $(SRC_DIR)relai.c
 
 in_test.o: $(SRC_DIR)in_test.c
 	gcc -Iheaders -o $(TEMP_DIR)in_test.o -c $(SRC_DIR)in_test.c
