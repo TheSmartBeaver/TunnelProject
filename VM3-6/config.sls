@@ -22,7 +22,7 @@ eth1:
     - ipv6proto: static
     - enable_ipv6: true
     - ipv6_autoconf: no
-    - ipv6ipaddr: fc00:1234:1::36
+    - ipv6ipaddr: fc00:1234:2::36
     - ipv6netmask: 64
 
 eth2:
