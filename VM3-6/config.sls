@@ -50,3 +50,9 @@ routes2:
       - name: LAN4
         ipaddr: 172.16.2.176/28
         gateway: 172.16.2.183
+
+net.ipv4.ip_forward:
+  sysctl:
+    - present
+    - value: 1
+
