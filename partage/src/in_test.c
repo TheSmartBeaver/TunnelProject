@@ -40,7 +40,6 @@ int main(int argc, char** argv){
 	}
 	else if(strcmp("VM1-6",argv[2])==0){
 		printf("On est dans VM1-6\n");
-		system("ip addr add fc00:1234:2::30 dev tun0");
 		ext_in("fc00:1234:2::36", tunfd, "ipv6");
 	}
 	else {printf("\nERREUR\n"); exit(1);}

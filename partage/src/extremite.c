@@ -139,7 +139,6 @@ void ext_out(char* ipvn, int tunfd)
 		} else
 			printf("server acccept the client...\n");
 	}
-
     func(connfd, tunfd);
 
     close(sockfd);
